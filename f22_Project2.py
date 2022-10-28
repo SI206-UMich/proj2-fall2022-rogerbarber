@@ -4,6 +4,8 @@ import os
 import csv
 import unittest
 import re
+from bs4 import UnicodeDammit
+
 
 
 def get_listings_from_search_results(html_file):
@@ -30,8 +32,7 @@ def get_listings_from_search_results(html_file):
     # abspath = os.path.dirname(__file__)
     # relpath = f"html_files\{html_file}"
     # path = os.path.join(abspath, relpath)
-    path = html_file
-    with open(path, "r") as handle:
+    with open(html_file, "r") as handle:
         soup = BeautifulSoup(handle, "html.parser")
     title_list = []
     price_list = []
@@ -58,15 +59,9 @@ def get_listings_from_search_results(html_file):
 
     return tuple_list
     
-
-            
-    
-
-
-
-
 # Test function for problem 1 below. Will delete later once finished.
-get_listings_from_search_results("html_files/mission_district_search_results.html")
+listings = get_listings_from_search_results("html_files/mission_district_search_results.html")
+
 
 
 
@@ -95,9 +90,24 @@ def get_listing_information(listing_id):
     )
     """
 
-    #<li class="f19phm7j dir dir-ltr">Policy number: <span class="ll4r2nl dir dir-ltr">STR-0000051</span></li> -- for policy number
+    #Using listing_id, open valid html file using open and listing_id, convert to soup.
+    with open(f"html_files/listing_{listing_id}.html", "r") as handle:
+        print(handle.readline())
+        print(handle.readlines())
+        soup2 = BeautifulSoup(handle, "html.parser")
 
-    pass
+    #finding policy number as string. could be number or word.
+    # found span: <span class="ll4r2nl dir dir-ltr">STR-0000051</span>. check for cross reference on other pages.
+    for item in soup2.find_all("span", class_="ll4r2nl dir dir-ltr"):
+        print(item)
+
+
+
+    
+
+
+
+get_listing_information("32871760")
 
 
 def get_detailed_listing_database(html_file):
