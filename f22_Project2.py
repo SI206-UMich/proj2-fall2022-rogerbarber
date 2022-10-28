@@ -1,6 +1,5 @@
 from xml.sax import parseString
 from bs4 import BeautifulSoup
-import re
 import os
 import csv
 import unittest
@@ -25,7 +24,23 @@ def get_listings_from_search_results(html_file):
         ('Loft in Mission District', 210, '1944564'),  # example
     ]
     """
-    pass
+
+    #Title is - finding, use search page.
+    #Price is: <span class="a8jt5op dir dir-ltr">$210 per night</span>
+    #parse filename to get listing ID number.
+
+    #way to access file name pulled from disc 6 below
+    abspath = os.path.dirname(__file__)
+    relpath = f"html_files\{html_file}"
+    path = os.path.join(abspath, relpath)
+    print(abspath)
+    with open(path, "r") as handle:
+        soup = BeautifulSoup(handle, "html.parser")
+    print(type(soup))
+    print(soup)
+    
+get_listings_from_search_results("mission_district_search_results.html")
+
 
 
 def get_listing_information(listing_id):
@@ -52,6 +67,9 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
+
+    #<li class="f19phm7j dir dir-ltr">Policy number: <span class="ll4r2nl dir dir-ltr">STR-0000051</span></li> -- for policy number
+
     pass
 
 
