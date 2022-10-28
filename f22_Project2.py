@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import os
 import csv
 import unittest
+import re
 
 
 def get_listings_from_search_results(html_file):
@@ -25,7 +26,7 @@ def get_listings_from_search_results(html_file):
     ]
     """
 
-    #Title is - finding, use search page.
+    #Title is this element: <div class="t1jojoys dir dir-ltr" id="title_1944564">Loft in Mission District</div>
     #Price is: <span class="a8jt5op dir dir-ltr">$210 per night</span>
     #parse filename to get listing ID number.
 
@@ -33,12 +34,32 @@ def get_listings_from_search_results(html_file):
     abspath = os.path.dirname(__file__)
     relpath = f"html_files\{html_file}"
     path = os.path.join(abspath, relpath)
-    print(abspath)
     with open(path, "r") as handle:
         soup = BeautifulSoup(handle, "html.parser")
-    print(type(soup))
-    print(soup)
+    title_list = []
+    price_list = []
+    id_list = []
+
+    #finding all titles, appending to list
+    for item in soup.find_all("div", class_="t1jojoys dir dir-ltr"):
+        title_list.append(item.text)
+
+    #finding all prices, appending to list, changing to integers
+    regex = "\$[0-9]{1,3}"
+    for item in soup.find_all("span", class_="a8jt5op dir dir-ltr"):
+        if "night" in item.text:
+            a = int(re.findall(regex, item.text)[0].replace("$", ""))
+            price_list.append(a)
     
+    #finding all id numbers, as strings.
+    
+            
+    
+
+
+
+
+# Test function for problem 1 below. Will delete later once finished.
 get_listings_from_search_results("mission_district_search_results.html")
 
 
