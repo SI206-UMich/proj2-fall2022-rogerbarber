@@ -26,33 +26,39 @@ def get_listings_from_search_results(html_file):
     ]
     """
 
-    #Title is this element: <div class="t1jojoys dir dir-ltr" id="title_1944564">Loft in Mission District</div>
-    #Price is: <span class="a8jt5op dir dir-ltr">$210 per night</span>
-    #parse filename to get listing ID number.
-
-    #way to access file name pulled from disc 6 below
-    abspath = os.path.dirname(__file__)
-    relpath = f"html_files\{html_file}"
-    path = os.path.join(abspath, relpath)
+    #way to access file name. Used resources from Disc 6, modified a bit to suit my needs.
+    # abspath = os.path.dirname(__file__)
+    # relpath = f"html_files\{html_file}"
+    # path = os.path.join(abspath, relpath)
+    path = html_file
     with open(path, "r") as handle:
         soup = BeautifulSoup(handle, "html.parser")
     title_list = []
     price_list = []
     id_list = []
+    tuple_list = []
 
-    #finding all titles, appending to list
+    #finding all titles and ids, appending to list. found on same divs!
+    id_regex = "title_([0-9]+)"
     for item in soup.find_all("div", class_="t1jojoys dir dir-ltr"):
         title_list.append(item.text)
+        id = re.findall(id_regex, item.get("id"))[0]
+        id_list.append(id)
 
     #finding all prices, appending to list, changing to integers
-    regex = "\$[0-9]{1,3}"
+    price_regex = "\$[0-9]{1,3}"
     for item in soup.find_all("span", class_="a8jt5op dir dir-ltr"):
         if "night" in item.text:
-            a = int(re.findall(regex, item.text)[0].replace("$", ""))
+            a = int(re.findall(price_regex, item.text)[0].replace("$", ""))
             price_list.append(a)
+
+    #creating tuple list, format: (title, cost, id) in format type (string, int, string).
+    for i in range(len(title_list)):
+        tuple_list.append((title_list[i], price_list[i], id_list[i]))
+
+    return tuple_list
     
-    #finding all id numbers, as strings.
-    
+
             
     
 
@@ -60,7 +66,7 @@ def get_listings_from_search_results(html_file):
 
 
 # Test function for problem 1 below. Will delete later once finished.
-get_listings_from_search_results("mission_district_search_results.html")
+get_listings_from_search_results("html_files/mission_district_search_results.html")
 
 
 
