@@ -201,7 +201,18 @@ def check_policy_numbers(data):
     ]
 
     """
-    pass
+
+    #Policy number is index 3 in each item
+    policy_list = []
+    regex = "20\d{2}-00\d{4}STR|STR-000\d{4}"
+    for item in data:
+        a = re.search(regex, item[3])
+        if not a:
+            if not re.search("pending|Pending|exempt|Exempt|not|Not", item[3]):
+                policy_list.append(item[3])
+    return policy_list
+
+    
 
 
 def extra_credit(listing_id):
