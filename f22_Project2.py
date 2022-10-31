@@ -6,7 +6,7 @@ import unittest
 import re
 
 
-
+#BELOW IS WORKING.
 def get_listings_from_search_results(html_file):
     """
     Write a function that creates a BeautifulSoup object on html_file. Parse
@@ -64,7 +64,7 @@ listings = get_listings_from_search_results("html_files/mission_district_search_
 
 
 
-
+#BELOW IS WORKING.
 def get_listing_information(listing_id):
     """
     Write a function to return relevant information in a tuple from an Airbnb listing id.
@@ -115,18 +115,9 @@ def get_listing_information(listing_id):
         for item2 in item.find_all("span"):
             if "bed" in item2.text:
                 bed_int = int(item2.text[0])
-    print(policy_str, type_str, bed_int)
     return (policy_str, type_str, bed_int)
 
     
-            
-
-
-
-    
-
-
-
 get_listing_information("1550913")
 
 
@@ -144,7 +135,17 @@ def get_detailed_listing_database(html_file):
         ...
     ]
     """
-    pass
+    return_list = []
+    part_1 = get_listings_from_search_results(html_file)
+    for item in part_1:
+        part_2 = get_listing_information(item[2])
+        return_list.append((item + part_2))
+
+    return return_list
+        
+
+
+    
 
 
 def write_csv(data, filename):
@@ -169,7 +170,16 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    sorted_data = sorted(data, key=lambda x: x[1])
+    with open(filename, "w", newline="") as handle:
+        mywriter = csv.writer(handle)
+        mywriter.writerow(["Listing Title", "Cost", "Listing ID", "Policy Number", "Place Type", "Number of Bedrooms"])
+        for row in sorted_data:
+            mywriter.writerow(row)
+
+    
+
+    
 
 
 def check_policy_numbers(data):
