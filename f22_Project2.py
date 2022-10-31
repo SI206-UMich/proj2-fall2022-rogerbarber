@@ -4,7 +4,6 @@ import os
 import csv
 import unittest
 import re
-from bs4 import UnicodeDammit
 
 
 
@@ -60,6 +59,7 @@ def get_listings_from_search_results(html_file):
     return tuple_list
     
 # Test function for problem 1 below. Will delete later once finished.
+#This function is working sub utilizing test cases.
 listings = get_listings_from_search_results("html_files/mission_district_search_results.html")
 
 
@@ -89,17 +89,37 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
+    #Stored variables (if any)
+    policy_num_list = []
+
+
 
     #Using listing_id, open valid html file using open and listing_id, convert to soup.
-    with open(f"html_files/listing_{listing_id}.html", "r") as handle:
-        print(handle.readline())
-        print(handle.readlines())
+    with open(f"html_files/listing_{listing_id}.html", encoding='utf8') as handle:
         soup2 = BeautifulSoup(handle, "html.parser")
 
     #finding policy number as string. could be number or word.
     # found span: <span class="ll4r2nl dir dir-ltr">STR-0000051</span>. check for cross reference on other pages.
-    for item in soup2.find_all("span", class_="ll4r2nl dir dir-ltr"):
-        print(item)
+    #Use li item instead of above! call span class afterwards.
+    for item in soup2.find_all("li", class_="f19phm7j dir dir-ltr"):
+        if "Policy" in item.text:
+            policy_str = item.find("span").text
+    for item in soup2.find("h2"):
+        if "private" in item or "Private" in item:
+            type_str = "Private Room"
+        elif "shared" in item or "Shared" in item:
+            type_str = "Shared Room"
+        else:
+            type_str = "Entire Room"
+    for item in soup2.find_all("li", class_="l7n4lsf dir dir-ltr"):
+        for item2 in item.find_all("span"):
+            if "bed" in item2.text:
+                bed_int = int(item2.text[0])
+    print(policy_str, type_str, bed_int)
+    return (policy_str, type_str, bed_int)
+
+    
+            
 
 
 
@@ -107,7 +127,7 @@ def get_listing_information(listing_id):
 
 
 
-get_listing_information("32871760")
+get_listing_information("1550913")
 
 
 def get_detailed_listing_database(html_file):
