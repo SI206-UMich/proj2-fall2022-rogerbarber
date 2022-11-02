@@ -58,11 +58,6 @@ def get_listings_from_search_results(html_file):
 
     return tuple_list
     
-# Test function for problem 1 below. Will delete later once finished.
-#This function is working sub utilizing test cases.
-listings = get_listings_from_search_results("html_files/mission_district_search_results.html")
-
-
 
 #BELOW IS WORKING.
 def get_listing_information(listing_id):
@@ -89,11 +84,6 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
-    #Stored variables (if any)
-    policy_num_list = []
-
-
-
     #Using listing_id, open valid html file using open and listing_id, convert to soup.
     with open(f"html_files/listing_{listing_id}.html", encoding='utf8') as handle:
         soup2 = BeautifulSoup(handle, "html.parser")
@@ -117,10 +107,7 @@ def get_listing_information(listing_id):
                 bed_int = int(item2.text[0])
     return (policy_str, type_str, bed_int)
 
-    
-get_listing_information("1550913")
-
-
+#BELOW IS WORKING
 def get_detailed_listing_database(html_file):
     """
     Write a function that calls the above two functions in order to return
@@ -142,12 +129,8 @@ def get_detailed_listing_database(html_file):
         return_list.append((item + part_2))
 
     return return_list
-        
 
-
-    
-
-
+#BELOW IS WORKING.     
 def write_csv(data, filename):
     """
     Write a function that takes in a list of tuples (called data, i.e. the
@@ -177,11 +160,7 @@ def write_csv(data, filename):
         for row in sorted_data:
             mywriter.writerow(row)
 
-    
-
-    
-
-
+#BELOW IS WORKING
 def check_policy_numbers(data):
     """
     Write a function that takes in a list of tuples called data, (i.e. the one that is returned by
@@ -211,6 +190,7 @@ def check_policy_numbers(data):
             if not re.search("pending|Pending|exempt|Exempt|not|Not", item[3]):
                 policy_list.append(item[3])
     return policy_list
+    #yes, policy list is only one entry long.
 
     
 
