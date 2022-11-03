@@ -6,6 +6,9 @@ import unittest
 import re
 
 
+#Name: Roger Barber
+#Worked with: No one else.
+
 #BELOW IS WORKING.
 def get_listings_from_search_results(html_file):
     """
